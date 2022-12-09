@@ -16,7 +16,7 @@ const PAGE_ACCESS_TOKEN =
 
 viewEngine(app);
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.status(201).send("Hello World!");
 });
 
 app.get("/home", (req, res) => {
@@ -28,7 +28,7 @@ app.get("/webhook", function (req, res) {
   if (req.query["hub.verify_token"] === VALIDATION_TOKEN) {
     res.send(req.query["hub.challenge"]);
   }
-  res.send("Error, wrong validation token");
+  res.status(201).send("Error, wrong validation token");
 });
 
 app.post("/webhook", function (req, res) {
