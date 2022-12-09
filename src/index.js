@@ -50,16 +50,9 @@ app.post("/webhook", function (req, res) {
       // Get the sender PSID
       let sender_psid = webhook_event.sender.id;
       console.log("Sender PSID: " + sender_psid);
-
-      // Check if the event is a message or postback and
-      // pass the event to the appropriate handler function
-      // if (webhook_event.message) {
-      //   handleMessage(sender_psid, webhook_event.message);
-      // } else if (webhook_event.postback) {
-      //   handlePostback(sender_psid, webhook_event.postback);
-      // }
-
       handleMessage(sender_psid, webhook_event.message);
+      callSendAPI(sender_psid, { text: "new mess send from data APi" });
+      console.log("End Call FnSEnd PSID: " + sender_psid);
     });
 
     // Returns a '200 OK' response to all requests
@@ -130,7 +123,7 @@ function callSendAPI(sender_psid, response) {
   // Send the HTTP request to the Messenger Platform
   request(
     {
-      uri: "https://graph.facebook.com/v2.6/me/messages",
+      uri: "https://graph.facebook.com/v15.0/me/messages",
       qs: { access_token: PAGE_ACCESS_TOKEN },
       method: "POST",
       json: request_body,
