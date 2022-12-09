@@ -7,6 +7,10 @@ const request = require("request");
 const viewEngine = require("./configs/viewEngine");
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 const port = 3000;
 
 const APP_SECRET = "b9454ba4c9fff5249a1192f6349c6a97";
@@ -34,7 +38,7 @@ app.get("/webhook", function (req, res) {
 
 app.post("/webhook", function (req, res) {
   let body = req.body;
-
+  console.log(body);
   // Checks this is an event from a page subscription
   if (body.object === "page") {
     // Iterates over each entry - there may be multiple if batched
@@ -70,39 +74,43 @@ async function handleMessage(sender_psid, received_message) {
   let response;
 
   /// Checks if the message contains text
-  response = await {
-    attachment: {
-      type: "template",
-      payload: {
-        template_type: "generic",
-        elements: [
-          {
-            title: "Welcome to Bot",
-            subtitle: "Tap a button to answer.",
-            buttons: [
-              {
-                type: "postback",
-                title: "Show Product",
-                payload: "SHOW_CART",
-              },
-              {
-                type: "postback",
-                title: "View Cart",
-                payload: "REVIEW_CART",
-              },
+  // response = await {
+  //   attachment: {
+  //     type: "template",
+  //     payload: {
+  //       template_type: "generic",
+  //       elements: [
+  //         {
+  //           title: "Welcome to Bot",
+  //           subtitle: "Tap a button to answer.",
+  //           buttons: [
+  //             {
+  //               type: "postback",
+  //               title: "Show Product",
+  //               payload: "SHOW_CART",
+  //             },
+  //             {
+  //               type: "postback",
+  //               title: "View Cart",
+  //               payload: "REVIEW_CART",
+  //             },
 
-              {
-                type: "web_url",
-                title: "Web Shop",
-                url: "https://facebook-bot-buz.herokuapp.com/facebook_cart",
-                webview_height_ratio: "full",
-                messenger_extensions: true,
-              },
-            ],
-          },
-        ],
-      },
-    },
+  //             {
+  //               type: "web_url",
+  //               title: "Web Shop",
+  //               url: "https://facebook-bot-buz.herokuapp.com/facebook_cart",
+  //               webview_height_ratio: "full",
+  //               messenger_extensions: true,
+  //             },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //   },
+  // };
+
+  response = await {
+    text: `đây là message text : new server`,
   };
 
   // Send the response message
@@ -136,7 +144,6 @@ function callSendAPI(sender_psid, response) {
     }
   );
 }
-
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
