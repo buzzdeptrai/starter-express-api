@@ -51,7 +51,7 @@ app.post("/webhook", function (req, res) {
       let sender_psid = webhook_event.sender.id;
       console.log("Sender PSID: " + sender_psid);
       handleMessage(sender_psid, webhook_event.message);
-      callSendAPI(sender_psid, { text: "new mess send from data APi" });
+      //callSendAPI(sender_psid, { text: "new mess send from data APi" });
       console.log("End Call FnSEnd PSID: " + sender_psid);
     });
 
