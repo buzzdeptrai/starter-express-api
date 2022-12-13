@@ -138,7 +138,7 @@ async function handleMessage(sender_psid, received_message) {
           received_message.quick_reply.payload
         );
       } else {
-        console.log(`--------- default mess`);
+        console.log(`--------- default mess` + PAGE_ACCESS_TOKEN);
         response = await {
           text: `đây là message text : "${received_message.text}". nodejs cyclic`,
         };
@@ -340,9 +340,12 @@ let setupProfile = function (req, res) {
   res.send("done setup profile");
 };
 
-let devFunctions = function (req, res) {
-  res.send("done devFunctions :" + PAGE_ACCESS_TOKEN);
-};
+async function devFunctions(req, res) {
+  let response = await showListCart.reviewCart(5230031970359667);
+  console.log(response);
+  callSendAPI(5230031970359667, response);
+  res.send("done devFunctions :");
+}
 module.exports = {
   postWebhook: postWebhook,
   getWebhook: getWebhook,

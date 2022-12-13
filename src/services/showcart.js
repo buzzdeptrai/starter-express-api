@@ -1,40 +1,33 @@
 require("dotenv").config();
 const request = require("request");
 const axios = require("axios").default;
-const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
+const db = require("../database/models/index");
 
 let getListCart = async (req, res, next) => {
-  let facebook_ProductList = {};
-  await axios
-    .get("https://buzz.chayquangcaoads.com/api/product")
-    .then(function (response) {
-      console.log("status", "result null", response.data.message);
-      facebook_ProductList = response.data.data.map((item) => {
-        const container = {
-          title: item.name_default,
-          subtitle: item.name_default + " " + item.price + " USD",
-          image_url: item.image,
-          buttons: [
-            {
-              type: "web_url",
-              url:
-                "https://buzz.chayquangcaoads.com/product-details/" + item.slug,
-              title: "View Detail",
-            },
-            {
-              type: "postback",
-              title: "Add to cart",
-              payload: "TO_CART_BUZZ_" + item.id,
-            },
-          ],
-        };
-        return container;
-      });
-    })
-    .catch((error) => {
-      console.log("error");
-    });
+  console.log("__ begin product list");
+  const dataRes = await db.Product.findAll();
 
+  //console.log("__ product list", dataRes);
+
+  const facebook_ProductList = dataRes.map(function (item) {
+    return {
+      title: item.name_default,
+      subtitle: item.name_default + " " + item.price + " USD",
+      image_url: item.image,
+      buttons: [
+        {
+          type: "web_url",
+          url: "https://buzz.chayquangcaoads.com/product-details/" + item.slug,
+          title: "View Detail",
+        },
+        {
+          type: "postback",
+          title: "Add to cart",
+          payload: "TO_CART_BUZZ_" + item.id,
+        },
+      ],
+    };
+  });
   console.log("__run api get product list", facebook_ProductList);
 
   return (response = {
@@ -188,27 +181,50 @@ let getCartByPsid = function (sender_psid) {
   });
 };
 
+const productGetPromise = (product_id) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const data = db.Product.findOne({
+        where: {
+          id: product_id,
+        },
+      });
+      resolve(data);
+    } catch (err) {
+      reject(new Error("Oops!.. get data Error"));
+    }
+  });
+};
+
 let reviewCart = async (sender_psid) => {
-  let facebook_ProductList = "";
   let orderNumber = "";
   let SumTotal = 0;
-  await axios
-    .get("https://buzz.chayquangcaoads.com/api/cart/" + sender_psid)
-    .then(function (response) {
-      console.log("status", response.data.data.id);
-      orderNumber = response.data.data.order_number;
-      //SumTotal = SumTotal + item.price * item.quantity;
-      response.data.data.__listDetail.map((item) => {
-        facebook_ProductList =
-          facebook_ProductList +
-          `\n- ${item.name} ${item.price} X ${item.quantity}`;
-        SumTotal = SumTotal + item.price * item.quantity;
-      });
-    })
-    .catch((error) => {
-      console.log("error get data");
-    });
+  let facebook_ProductList = "";
 
+  const dataRes = await db.Orders.findOne({
+    where: {
+      psid: sender_psid,
+    },
+  });
+  orderNumber = dataRes.sku;
+  let jsonData = JSON.parse(dataRes.cart_data);
+
+  for (let x in jsonData) {
+    let itemProduct = jsonData[x];
+    console.log("data-get:", itemProduct);
+    await productGetPromise(itemProduct.product_id)
+      .then((result) => {
+        console.log("data:" + itemProduct.quantity);
+        console.log("price:" + result.price);
+        SumTotal += result.price * itemProduct.quantity;
+
+        facebook_ProductList += `\n- ${result.name_default} ${result.price} X ${itemProduct.quantity}`;
+      })
+      .catch((error) => {
+        console.log("In the catch", error);
+      });
+  }
+  console.log("end-foreach", facebook_ProductList);
   return (response = {
     attachment: {
       type: "template",

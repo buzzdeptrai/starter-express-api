@@ -7,6 +7,8 @@ const request = require("request");
 const viewEngine = require("./configs/viewEngine");
 const indexRouter = require("./routes/index");
 
+const db = require("./database/models/index");
+
 const app = express();
 
 app.use(bodyParser.json());
