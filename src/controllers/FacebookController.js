@@ -138,6 +138,7 @@ async function handleMessage(sender_psid, received_message) {
           received_message.quick_reply.payload
         );
       } else {
+        console.log(`--------- default mess`);
         response = await {
           text: `đây là message text : "${received_message.text}". nodejs cyclic`,
         };
