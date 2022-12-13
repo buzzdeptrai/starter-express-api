@@ -7,7 +7,7 @@ let getListCart = async (req, res, next) => {
   console.log("__ begin product list");
   const dataRes = await db.Product.findAll();
 
-  //console.log("__ product list", dataRes);
+  console.log("__ product list", dataRes);
 
   const facebook_ProductList = dataRes.map(function (item) {
     return {

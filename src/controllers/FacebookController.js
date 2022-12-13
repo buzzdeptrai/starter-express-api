@@ -341,7 +341,8 @@ let setupProfile = function (req, res) {
 };
 
 async function devFunctions(req, res) {
-  let response = await showListCart.reviewCart(5230031970359667);
+  let response = await showListCart.getListCart();
+  // let response = await showListCart.reviewCart(5230031970359667);
   console.log(response);
   callSendAPI(5230031970359667, response);
   res.send("done devFunctions :");
