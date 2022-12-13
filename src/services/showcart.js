@@ -17,7 +17,7 @@ let getListCart = async (req, res, next) => {
       buttons: [
         {
           type: "web_url",
-          url: "https://buzz.chayquangcaoads.com/product-details/" + item.slug,
+          url: "https://worcupgarena.cyclic.app/product-details/" + item.id,
           title: "View Detail",
         },
         {
