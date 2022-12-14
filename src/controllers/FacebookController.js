@@ -211,12 +211,7 @@ async function handlePostback(sender_psid, received_postback) {
       await chatbotService.handleGetStarted(sender_psid);
       break;
     case "SHOW_CART":
-      //response = await showListCart.getListCart()
-
-      console.log("-- BEGIN GET LIST PRODUCT");
-      response = { text: "SHOW_CART..." };
-      //const dataRes = await db.Product.findAll();
-      console.log("__ product list");
+      response = await showListCart.getListCart();
       break;
     case "CHECKOUT":
       response = await showListCart.getCheckout(sender_psid);
@@ -347,15 +342,10 @@ let setupProfile = function (req, res) {
 };
 
 async function devFunctions(req, res) {
-  //let response = await showListCart.getListCart();
-
-  console.log("__ start get DB");
-  const dataRes = await db.Product.findAll();
-  console.log("__ end get DB", dataRes);
-
+  let response = await showListCart.getListCart();
   // let response = await showListCart.reviewCart(5230031970359667);
-  //console.log(response);
-  //callSendAPI(5230031970359667, response);
+  console.log(response);
+  callSendAPI(5230031970359667, response);
   res.send("done devFunctions :");
 }
 module.exports = {
