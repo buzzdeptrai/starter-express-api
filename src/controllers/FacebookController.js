@@ -216,7 +216,7 @@ async function handlePostback(sender_psid, received_postback) {
       console.log("-- BEGIN GET LIST PRODUCT");
       response = { text: "SHOW_CART..." };
       //const dataRes = await db.Product.findAll();
-      console.log("__ product list", dataRes);
+      console.log("__ product list");
       break;
     case "CHECKOUT":
       response = await showListCart.getCheckout(sender_psid);
