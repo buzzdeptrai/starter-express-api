@@ -4,6 +4,7 @@
     "password": "Nav@#vietDigital.920bu",
     "database": "bongda24h",
     "host": "157.230.244.182",
+    "port": 3306,
     "dialect": "mysql",
     "logging": false
   },
