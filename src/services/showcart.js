@@ -4,7 +4,7 @@ const axios = require("axios").default;
 const db = require("../database/models/index");
 
 let getListCart = async (req, res, next) => {
-  console.log("__ begin product list");
+  console.log("__ begin product list...");
   const dataRes = await db.Product.findAll();
 
   console.log("__ product list", dataRes);
