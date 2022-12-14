@@ -1,5 +1,6 @@
 require("dotenv").config();
 const request = require("request");
+const db = require("../database/models/index");
 let showListCart = require("../services/showcart");
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 
@@ -210,7 +211,11 @@ async function handlePostback(sender_psid, received_postback) {
       await chatbotService.handleGetStarted(sender_psid);
       break;
     case "SHOW_CART":
-      response = await showListCart.getListCart();
+      //response = await showListCart.getListCart()
+
+      const dataRes = await db.Product.findAll();
+      console.log("__ product list", dataRes);
+      response = { text: "SHOW_CART..." };
       break;
     case "CHECKOUT":
       response = await showListCart.getCheckout(sender_psid);
