@@ -213,9 +213,10 @@ async function handlePostback(sender_psid, received_postback) {
     case "SHOW_CART":
       //response = await showListCart.getListCart()
 
+      console.log("-- BEGIN GET LIST PRODUCT");
+      response = { text: "SHOW_CART..." };
       const dataRes = await db.Product.findAll();
       console.log("__ product list", dataRes);
-      response = { text: "SHOW_CART..." };
       break;
     case "CHECKOUT":
       response = await showListCart.getCheckout(sender_psid);
